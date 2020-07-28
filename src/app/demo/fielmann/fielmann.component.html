@@ -1,0 +1,56 @@
+
+    <mat-toolbar color="primary">
+      <span>Fielmann AG</span>
+    </mat-toolbar> 
+    <div class="margin20 textCenter fs20">The Weather Finder</div>
+    <div class="wrap">
+      <label class="db padB10 fb" for="city">Select a City: </label>
+
+      <form class="example-form">
+        <mat-form-field class="example-full-width">
+          <input matInput
+                 placeholder="City Name"
+                 aria-label="City"
+                 [matAutocomplete]="auto"
+                 [formControl]="stateCtrl">
+          <mat-autocomplete (optionSelected)='_getSelectedState($event.option.value)' #auto="matAutocomplete">
+            <mat-option  *ngFor="let state of filteredStates | async" [value]="state.name">
+              <img class="example-option-img" aria-hidden [src]="state.flag" height="25">
+              <span>{{state.name}}</span> |
+              <small>weather : {{state.weather}}</small>
+              <small> {{state.status}}</small>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <br>
+        <mat-slide-toggle
+          [checked]="stateCtrl.disabled"
+          (change)="stateCtrl.disabled ? stateCtrl.enable() : stateCtrl.disable()">
+          Disable City Selection?
+        </mat-slide-toggle>
+      </form>
+      <br>
+      <div class="posRel">
+        <div *ngIf="this.isInfoAvilable" id="suggestions" class="suggestions">
+          <div class="suggestionItem red">No Info available!</div>
+        </div>
+      </div>
+      <div id="selectedCityInfo">
+        <div>
+          <span class="w50in fb">City: {{selectedState[0]?.name}}</span>
+          <span class="w50in txtLeft" id="selectedCity"></span>
+        </div>
+        <div>
+          <span class="w50in fb">Weather: {{selectedState[0]?.weather}}</span>
+          <span class="w50in txtLeft" id="selctedWeather"></span>
+        </div>
+        <div>
+          <span class="w50in fb">Status: {{selectedState[0]?.status}}</span>
+          <span class="w50in txtLeft" id="selectedStatus"></span>
+        </div>
+      </div>
+      <div class="btnWrap">
+        <button type="button" (click)="_resetStateSelection();" id="resetBtn" >Reset</button>
+      </div>
+    </div>
+
